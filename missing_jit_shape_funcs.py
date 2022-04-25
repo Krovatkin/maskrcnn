@@ -1,4 +1,5 @@
 import torch_mlir_shape_funcs
+import pprint
 
 # Note, this list was obtained by
 # `running python maskrcnn.py`
@@ -93,37 +94,35 @@ jit_shape_funcs = set([remove_suffix(x.replace("〇", ".")) for x in  torch_mlir
 not_implemented = []
 for o in maskrcnn_ops:
   co = o.replace("lazy::", "").replace("aten::", "")
-  if not co in jit_shape_funcs:
+  if not co in jit_shape_funcs and co.lower() == co:
     not_implemented.append(co)
 
-print(not_implemented)
-
+pprint.pprint(sorted(not_implemented))
 # This is the list of ops in MaskRCNN that do NOT have corresponding JIT SSA functions
 """
-_index_put_impl_
-_local_scalar_dense
-_unique2
-index.Tensor
-nonzero
-randperm.generator_out
-_copy_from
-_copy_from_and_resize
-arange_out
-bitwise_or
-clamp_min
-convolution_backward
-fill_
-narrow
-relu_
-smooth_l1_loss
-smooth_l1_loss_backward
-sort
-stack
-upsample_bilinear2d
-upsample_nearest2d
-upsample_nearest2d_backward
-zero_
-torchvision::_roi_align_backward
-torchvision::nms
-torchvision::roi_align
+['_copy_from',
+ '_copy_from_and_resize',
+ '_index_put_impl_',
+ '_local_scalar_dense',
+ '_unique2',
+ 'arange_out',
+ 'bitwise_or',
+ 'clamp_min',
+ 'convolution_backward',
+ 'fill_',
+ 'narrow',
+ 'nonzero',
+ 'randperm.generator_out',
+ 'relu_',
+ 'smooth_l1_loss',
+ 'smooth_l1_loss_backward',
+ 'sort',
+ 'stack',
+ 'torchvision::_roi_align_backward',
+ 'torchvision::nms',
+ 'torchvision::roi_align',
+ 'upsample_bilinear2d',
+ 'upsample_nearest2d',
+ 'upsample_nearest2d_backward',
+ 'zero_']
 """
