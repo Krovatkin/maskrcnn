@@ -7,6 +7,13 @@ from torch.utils._pytree import tree_map
 
 torch._lazy.ts_backend.init()
 
+"""
+This script is using pretrained maskrcnn_resnet50_fpn and
+10 random images from the COCO dataset
+One could use this script to run maskrcnn against the lazy device
+and collect statistics on supported and unsupported ops by Lazy
+"""
+
 model = torchvision.models.detection.maskrcnn_resnet50_fpn(pretrained=True)
 device='lazy'
 model.to(device)
@@ -15,14 +22,11 @@ model.train()
 lr = 0.02
 momentum = 0.9
 weight_decay = 1e-4
-niter = 10
+niter = 3
 params = [p for p in model.parameters() if p.requires_grad]
 optimizer = torch.optim.SGD(params, lr=lr, momentum=momentum, weight_decay=weight_decay)
 
 maskrcnn_inputs = torch.load('maskrcnn_inputs.pt')
-
-
-print(len(maskrcnn_inputs))
 
 for i, (images, targets) in zip(range(niter), maskrcnn_inputs):
     print(f"running {i}")
