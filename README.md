@@ -10,3 +10,9 @@ It includes the following:
 * `missing_jit_shape_funcs.py` -- a script to generate missing JIT SSA shape functions
 * `missing_ub_funcs.py` -- a script to generate missing ops in LTC for MaskRCNN
 * `torch_mlir_shape_funcs.py` a script to generate the list of JIT shape functions we already implement
+
+### Installation 
+
+Run `python install.py`. The script will do the following:
+* Recursively checks out torchvision if it hasn't been checked out already
+* Builds `torchvision`
